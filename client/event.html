@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-
+<!--completed-->
 <head>
   <title>TARFAIR</title>
   <link rel="stylesheet" type="text/css" href="page.css">
@@ -9,12 +9,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="src/img/favicon.png" />
   <script>
-    function amogus()
-    {
+    function amogus() {
       localStorage.removeItem("token_id");
       window.location.replace("login.html");
     }
     document.addEventListener('DOMContentLoaded', function () {
+      var navbar = document.querySelector('.nav-links');
+      var navbarHeight = navbar.offsetHeight;
+      var content = document.querySelector('.content');
+      content.style.marginTop = navbarHeight + 'px';
       if (localStorage.getItem("token_id") === null) {
         alert("Please log in to continue");
         window.location.replace("login.html");
@@ -51,6 +54,37 @@
         }, 2000);
       }
     });
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        var events = JSON.parse(this.responseText);
+        for (let i = 0; i < events.length; ++i) {
+          var eventContainer = document.querySelector('.events');
+          var newElement = document.createElement('div');
+          newElement.setAttribute('class', 'event-details');
+          var eventImage = document.createElement('img');
+          eventImage.setAttribute('src', events[i]['image_link']);
+          eventImage.setAttribute('class', 'eventimg');
+          newElement.appendChild(eventImage);
+          var eventDetails = document.createElement('div');
+          eventDetails.setAttribute('class', 'event-info');
+          var eventNameElement = document.createElement('a');
+          eventNameElement.textContent = events[i]['event_name'];
+          eventNameElement.setAttribute('href', `event_details.html?name=${encodeURIComponent(events[i]['event_name'])}`);
+          eventDetails.appendChild(eventNameElement);
+          var eventDateTime = events[i]['event_date_time'].slice(0, -7);
+          var eventDescriptionElement = document.createElement('span');
+          var eventBr = document.createElement('br');
+          eventDescriptionElement.textContent = ` (${eventDateTime}): ${events[i]['event_description']} - ${events[i]['event_price'] == 0 ? "FREE!" : "RM " + events[i]['event_price'] + " per entry."}`;
+          eventDetails.appendChild(eventDescriptionElement);
+          newElement.appendChild(eventDetails);
+          eventContainer.appendChild(newElement);
+          eventContainer.appendChild(eventBr);
+        }
+      }
+    };
+    xhr.open("GET", "../server/fetch_event_all.php", true);
+    xhr.send();
   </script>
 </head>
 
@@ -65,16 +99,25 @@
       <a href="about.html">About</a>
     </div>
     <form class="search-form" action="../server/process_search.php" method="POST">
-      <input type="text" name="search" placeholder="Search event..." required>
+      <input type="text" name="search" class="search" placeholder="Search event..." required>
       <input type="image" src="src/img/search.png" alt="submit" width="15%" height="15%">
     </form>
     <div class="account">
       <a href="#">Account</a>
     </div>
     <div class="account">
-    <a href="#" onclick="amogus()">Log out</a>
-  </div>
+      <a href="#" onclick="amogus()">Log out</a>
+    </div>
   </nav>
+  <div class="content">
+    <div class="text">
+      <h1>Events</h1>
+      <h3 class="text">Here are some of the exciting events that we have planned for you:</h3>
+      <div class="events">
+
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>

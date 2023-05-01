@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<!--completed-->
+
+<head>
+    <title>Check out</title>
+    <link rel="stylesheet" type="text/css" href="page.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="src/img/favicon.png" />
+    <script>
+        function amogus() {
+            localStorage.removeItem("token_id");
+            window.location.replace("login.html");
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            const url = new URL(window.location.href);
+            const name = url.searchParams.get('name');
+            const decodedName = decodeURIComponent(name);
+            const fetchEvent = new XMLHttpRequest();
+            fetchEvent.open('POST', "../server/fetch_event_specific.php", true);
+            fetchEvent.send(JSON.stringify({ event_name: decodedName }));
+            fetchEvent.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var events = JSON.parse(this.responseText);
+                    var event = events[0];
+                    const eventH1 = document.querySelector('.event-name');
+                    eventH1.textContent = "Check out - " + event['event_name'] + " ticket";
+                    var eventContainer = document.querySelector('.payment');
+
+                }
+            }
+            var navbar = document.querySelector('.nav-links');
+            var navbarHeight = navbar.offsetHeight;
+            var content = document.querySelector('.content');
+            content.style.marginTop = navbarHeight + 'px';
+            if (localStorage.getItem("token_id") === null) {
+                alert("Please log in to continue");
+                window.location.replace("login.html");
+            }
+            else {
+                const token = { token_id: localStorage.getItem("token_id") };
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', "../server/token_check.php", true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.send(JSON.stringify(token));
+                xhr.addEventListener("load", function () {
+                    try {
+                        JSON.parse(xhr.responseText);
+                    }
+                    catch (error) {
+                        console.log(xhr.responseText);
+                    }
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.flag) {
+                        alert("Failed to validate token_id, please log in again.");
+                        localStorage.removeItem("token_id");
+                        window.location.replace("login.html");
+                    }
+                });
+            }
+        });
+        document.addEventListener("visibilitychange", function () {
+            if (document.hidden) {
+                document.title = "Come Back Soon!";
+            } else {
+                document.title = "Welcome Back!";
+                setTimeout(() => {
+                    document.title = "Check out";
+                }, 2000);
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            <img src="src/img/tarumt-logo1.png" alt="logo">
+        </div>
+        <div class="nav-links">
+            <a href="main.html">Home</a>
+            <a href="event.html" id="cur">Event</a>
+            <a href="about.html">About</a>
+        </div>
+        <form class="search-form" action="../server/process_search.php" method="POST">
+            <input type="text" name="search" class="search" placeholder="Search event..." required>
+            <input type="image" src="src/img/search.png" alt="submit" width="15%" height="15%">
+        </form>
+        <div class="account">
+            <a href="#">Account</a>
+        </div>
+        <div class="account">
+            <a href="#" onclick="amogus()">Log out</a>
+        </div>
+    </nav>
+    <div class="content">
+        <div class="text">
+            <h1 class="event-name"></h1>
+            <div class="payment">
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

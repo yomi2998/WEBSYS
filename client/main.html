@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-
+<!--completed-->
 <head>
   <title>TARFAIR</title>
   <link rel="stylesheet" type="text/css" href="page.css">
@@ -61,15 +61,30 @@
         console.log(events);
         for (let i = 0; i < events.length; ++i) {
           var eventContainer = document.querySelector('.events');
-          var newElement = document.createElement('p');
-          newElement.setAttribute('align', 'left');
-          var eventDateTime = events[i]['event_date_time'].slice(0, -7); // Extract date and time string and remove ".000000" at end
-          newElement.textContent = events[i]['event_name'] + ` (${eventDateTime}): ` + events[i]['event_description'];
+          var newElement = document.createElement('div');
+          newElement.setAttribute('class', 'event-details');
+          var eventImage = document.createElement('img');
+          eventImage.setAttribute('src', events[i]['image_link']);
+          eventImage.setAttribute('class', 'eventimg');
+          newElement.appendChild(eventImage);
+          var eventDetails = document.createElement('div');
+          eventDetails.setAttribute('class', 'event-info');
+          var eventNameElement = document.createElement('a');
+          eventNameElement.textContent = events[i]['event_name'];
+          eventNameElement.setAttribute('href', `event_details.html?name=${encodeURIComponent(events[i]['event_name'])}`);
+          eventDetails.appendChild(eventNameElement);
+          var eventDateTime = events[i]['event_date_time'].slice(0, -7);
+          var eventDescriptionElement = document.createElement('span');
+          var eventBr = document.createElement('br');
+          eventDescriptionElement.textContent = ` (${eventDateTime}): ${events[i]['event_description']} - ${events[i]['event_price'] == 0 ? "FREE!" : "RM " + events[i]['event_price'] + " per entry."}`;
+          eventDetails.appendChild(eventDescriptionElement);
+          newElement.appendChild(eventDetails);
           eventContainer.appendChild(newElement);
+          eventContainer.appendChild(eventBr);
         }
       }
     };
-    xhr.open("GET", "../server/fetch_event.php", true);
+    xhr.open("GET", "../server/fetch_event_14days.php", true);
     xhr.send();
   </script>
 </head>
