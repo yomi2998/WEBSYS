@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>TARFAIR Fun Fair Login</title>
+  <link rel="stylesheet" type="text/css" href="loginreg.css">
+  <link rel="stylesheet" type="text/css" href="page.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="src/img/favicon.png"  />
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if(localStorage.getItem("token_id")!== null)
+      {
+        const token = { token_id: localStorage.getItem("token_id") };
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', "../server/token_check.php", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send(JSON.stringify(token));
+        xhr.addEventListener("load", function () {
+          try {
+            JSON.parse(xhr.responseText);
+          }
+          catch (error) {
+            console.log(xhr.responseText);
+          }
+          const response = JSON.parse(xhr.responseText);
+          if (!response.flag) {
+            window.location.replace("main.html");
+          }
+      });
+      }
+      document.querySelector('form').addEventListener('submit', function (event) {
+        console.log("triggered");
+        event.preventDefault();
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', event.target.action, true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        const data = JSON.stringify({
+          username: event.target.username.value,
+          password: event.target.password.value,
+        });
+        xhr.send(data);
+        xhr.addEventListener("load", function () {
+          try {
+            JSON.parse(xhr.responseText);
+          }
+          catch (error) {
+            console.log(xhr.responseText);
+          }
+          const response = JSON.parse(xhr.responseText);
+          switch (response.flag) {
+            case 0:
+              localStorage.setItem('token_id', response.token_id);
+              window.location.replace("main.html");
+              break;
+            case 1:
+              document.getElementById("err").innerHTML = response.error;
+              break;
+          }
+        });
+      });
+    });
+
+  </script>
+</head>
+
+<body>
+  <h2>TARFAIR</h2>
+
+  <form action="../server/process_log.php" method="POST">
+    <label id="err" style="color:red"></label>
+    <label for="username">TARFAIR ID</label>
+    <input type="text" name="username" placeholder="Enter your TARFAIR ID" required>
+
+    <label for="password">Password</label>
+    <input type="password" name="password" placeholder="Enter your password" required>
+
+    <input type="submit" value="Log In">
+
+    <p class="create-account">
+      Don't have an TARFAIR ID? <a href="register.html" style="color:black">Create one now.</a>
+    </p>
+  </form>
+</div>
+</body>
+
+</html>

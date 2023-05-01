@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>TARFAIR</title>
+  <link rel="stylesheet" type="text/css" href="page.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="src/img/favicon.png" />
+  <script>
+    function amogus()
+    {
+      localStorage.removeItem("token_id");
+      window.location.replace("login.html");
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      var navbar = document.querySelector('.nav-links');
+  var navbarHeight = navbar.offsetHeight;
+  var content = document.querySelector('.content');
+  content.style.marginTop = navbarHeight + 'px';
+      if (localStorage.getItem("token_id") === null) {
+        alert("Please log in to continue");
+        window.location.replace("login.html");
+      }
+      else {
+        const token = { token_id: localStorage.getItem("token_id") };
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', "../server/token_check.php", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send(JSON.stringify(token));
+        xhr.addEventListener("load", function () {
+          try {
+            JSON.parse(xhr.responseText);
+          }
+          catch (error) {
+            console.log(xhr.responseText);
+          }
+          const response = JSON.parse(xhr.responseText);
+          if (response.flag) {
+            alert("Failed to validate token_id, please log in again.");
+            localStorage.removeItem("token_id");
+            window.location.replace("login.html");
+          }
+        });
+      }
+    });
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) {
+        document.title = "Come Back Soon!";
+      } else {
+        document.title = "Welcome Back!";
+        setTimeout(() => {
+          document.title = "TARFAIR";
+        }, 2000);
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <nav>
+    <div class="logo">
+      <img src="src/img/tarumt-logo1.png" alt="logo">
+    </div>
+    <div class="nav-links">
+      <a href="main.html">Home</a>
+      <a href="#">Event</a>
+      <a href="about.html" id="cur">About</a>
+    </div>
+    <form class="search-form" action="../server/process_search.php" method="POST">
+      <input type="text" name="search" placeholder="Search event..." required>
+      <input type="image" src="src/img/search.png" alt="submit" width="15%" height="15%">
+    </form>
+    <div class="account">
+      <a href="#">Account</a>
+    </div>
+    <div class="account">
+    <a href="#" onclick="amogus()">Log out</a>
+  </div>
+  </nav>
+  <div class="content">
+    <div class="text">
+      <h1>About Us</h1>
+      <p class="text">Welcome to the Fun Fair at Campus! We are a group of enthusiastic individuals who are passionate about creating an enjoyable and engaging experience for all visitors to our fair.
+
+        Our team has worked tirelessly to create an exciting environment that is perfect for students, faculty, and members of the community to gather and have fun. From thrilling rides to classic carnival games, there is something for everyone at our fair.
+        
+        Our goal is to provide a safe and welcoming space for people of all ages to come together and make memories that will last a lifetime. We believe that the power of play and social interaction can bring joy and happiness to anyone who participates in our fair.
+        
+        We are committed to providing a high-quality experience for all of our visitors, and we are constantly striving to improve and innovate. Our dedicated team of volunteers and staff work hard to ensure that every aspect of the fair is well-organized, enjoyable, and memorable.
+        
+        We hope that you will join us at the Fun Fair at Campus and experience the joy and excitement that we have to offer. Come and be a part of our community and create memories that will last a lifetime!</p>  
+    </div>
+    <br>
+    <div class="text">
+      <h1>Our Location</h1>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.536632215643!2d101.72553237467645!3d3.2155572967596235!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cc3843bfb6a031%3A0x2dc5e067aae3ab84!2sTunku%20Abdul%20Rahman%20University%20of%20Management%20and%20Technology%20(TAR%20UMT)!5e0!3m2!1sen!2smy!4v1682744148389!5m2!1sen!2smy" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <br>
+    <div class="text">
+      <h1>Contact Us</h1>
+      <h2>Have a question? Feel free to contact us!</h2>
+      <h3>TUNKU ABDUL RAHMAN UNIVERSITY OF MANAGEMENT AND TECHNOLOGY</h3>
+      <p class="text">Phone: <a href="tel:+60123456789">+6012-345 6789</a></p>
+      <p class="text">Email: <a href="mailto:tarfair@tarc.edu.my">tarfair@tarc.edu.my</a></p>
+    </div>
+  </div>
+</body>
+
+</html>

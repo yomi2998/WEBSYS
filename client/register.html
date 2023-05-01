@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>TARFAIR Fun Fair Registration</title>
+  <link rel="stylesheet" type="text/css" href="loginreg.css">
+  <link rel="stylesheet" type="text/css" href="page.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="src/img/favicon.png" />
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelector('form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (event.target.password.value === event.target.repassword.value) {
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', event.target.action, true);
+          xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+          const data = JSON.stringify({
+            username: event.target.username.value,
+            password: event.target.password.value,
+            gender: event.target.gender.value,
+            birthdate: event.target.birthdate.value,
+            email: event.target.email.value
+          });
+          xhr.send(data);
+          xhr.addEventListener("load", function () {
+            try {
+              JSON.parse(xhr.responseText);
+            }
+            catch (error) {
+              console.log(xhr.responseText);
+            }
+            const response = JSON.parse(xhr.responseText);
+            switch (response.flag) {
+              case 0:
+                alert(response.error);
+                window.location.replace("login.html");
+                break;
+              case 1:
+                alert(response.error);
+                break;
+            }
+          });
+        }
+        else
+        {
+          alert("Error: password and re-enter password mismatch.");
+        }
+      });
+    });
+
+  </script>
+
+
+</head>
+
+<body>
+  <h2>TARFAIR Registration</h2>
+
+  <form action="../server/process_reg.php" method="POST" id="regform">
+    <label for="username" id="label">TARFAIR username</label>
+    <input type="text" name="username" placeholder="Enter your TARFAIR username" required>
+
+    <label for="password" id="label">Password</label>
+    <input type="password" name="password" placeholder="Enter your password" required>
+
+    <label for="repassword" id="label">Re-enter Password</label>
+    <input type="password" name="repassword" placeholder="Re-enter your password" required>
+
+    <p id="label">Gender</p>
+    <div align="left" class="radio-option">
+      <input type="radio" id="male" name="gender" value="M" required>
+      <label for="male" id="label">Male</label>
+      <input type="radio" id="female" name="gender" value="F" requried>
+      <label for="female" id="label">Female</label>
+    </div>
+
+
+    <label for="email" id="label">E-mail</label>
+    <input type="text" name="email" placeholder="Enter your e-mail" required>
+
+    <label for="birthdate" id="label">Birth date (click calendar icon on the right)</label>
+    <input type="date" name="birthdate" placeholder="Enter your birth date" style="float: left;" required>
+
+    <input type="submit" value="Register">
+  </form>
+</body>
+
+</html>

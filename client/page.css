@@ -1,0 +1,146 @@
+body {
+    font-family: 'Outfit', sans-serif;
+    background: url('src/img/bg.jpg')no-repeat center center fixed;
+    background-size: cover;
+}
+input.search, input.search:focus{
+    background-color: rgba(82, 82, 82, 0.4);
+    transition: background-color 0.5s ease;
+}
+div.text{
+    display: block;
+    background-color: rgba(82, 82, 82, 0.4);
+    color: #ffffff;
+    max-width: 600px;   
+    margin: auto;
+    padding: 40px;
+    box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+    backdrop-filter: blur(40px);
+}
+p.text{
+    text-align: left;
+}
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3); /* semi-transparent black overlay */
+    backdrop-filter: blur(20px); /* backdrop filter for modern browsers */
+  }
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    height: 60px;
+    z-index: 1;
+    background-color: transparent;
+    backdrop-filter: blur(30px);
+}
+
+.logo {
+    height: 90%;
+    max-height: 100%;
+    display: flex;
+    margin-left: 1%;
+    padding-right: 2%;
+}
+
+nav .logo {
+    flex: 1;
+}
+
+nav .nav-links {
+    flex: 6;
+    text-align: left;
+}
+
+nav .nav-links a {
+    display: inline-block;
+    color: white;
+    text-align: left;
+    padding: 30px 16px;
+    text-decoration: none;
+    transition: background-color 0.2s linear, color 0.2s linear;
+}
+
+nav .nav-links a:hover,
+#cur {
+    background-color: #ddd;
+    color: black;
+}
+
+nav .search-form {
+    flex: 1;
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    text-align: left;
+    margin-right: 1%;
+}
+
+nav .search-form input[type="text"] {
+    color: white;
+    padding: 10px;
+    text-align: left;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+    margin-right: 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(30px);
+}
+
+nav .account {
+    flex: 0.4;
+    text-align: center;
+    display: inline-block;
+}
+
+nav .account a {
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+}
+
+nav .account a:hover {
+    color: #ddd;
+    display: inline-block;
+}
+
+a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px solid #ffffff;
+    transition: border-bottom 0.3s;
+}
+
+a:hover {
+    border-bottom: 2px solid #000000;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #b3b6b9;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a1a3a6;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}

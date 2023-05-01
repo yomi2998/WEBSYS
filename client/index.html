@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <title>TARFAIR</title>
+</head>
+
+<body class="noselect">
+    <div class="snowfall">
+      <div class="snowflake"></div>
+    </div>
+    <div class="bg-image"></div>
+  
+    <div class="bg-text">
+      <div class="title">
+        <img src="src/img/tarumt-logo1.png" alt="tarumt logo">
+        <h1>TARFAIR</h1>
+      </div>
+        <h2>Our annual Campus Fun Fair is back and better than ever! Bring your family and friends to enjoy a variety of games, activities, and delicious food.</h2>
+        <a href="login.html"><button>Log In</button></a>
+        <a href="register.html"><button>Register</button></a>
+    </div>
+  
+    <script>
+      for (var i = 0; i < 50; i++) {
+        var snowflake = document.createElement("div");
+        snowflake.classList.add("snowflake");
+        snowflake.style.left = Math.random() * window.innerWidth + "px";
+        snowflake.style.animationDelay = Math.random() * 15 + "s";
+        document.querySelector(".snowfall").appendChild(snowflake);
+      }
+      document.addEventListener("visibilitychange", function() {
+      if (document.visibilityState === 'visible') {
+        document.title = "TARFAIR";
+      } else {
+        document.title = "Come back later!";
+      }
+    });
+    </script>
+  </body>
+
+</html>

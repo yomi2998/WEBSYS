@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>TARFAIR</title>
+  <link rel="stylesheet" type="text/css" href="page.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="src/img/favicon.png" />
+  <script>
+    function amogus()
+    {
+      localStorage.removeItem("token_id");
+      window.location.replace("login.html");
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      var navbar = document.querySelector('.nav-links');
+  var navbarHeight = navbar.offsetHeight;
+  var content = document.querySelector('.content');
+  content.style.marginTop = navbarHeight + 'px';
+      if (localStorage.getItem("token_id") === null) {
+        alert("Please log in to continue");
+        window.location.replace("login.html");
+      }
+      else {
+        const token = { token_id: localStorage.getItem("token_id") };
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', "../server/token_check.php", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send(JSON.stringify(token));
+        xhr.addEventListener("load", function () {
+          try {
+            JSON.parse(xhr.responseText);
+          }
+          catch (error) {
+            console.log(xhr.responseText);
+          }
+          const response = JSON.parse(xhr.responseText);
+          if (response.flag) {
+            alert("Failed to validate token_id, please log in again.");
+            localStorage.removeItem("token_id");
+            window.location.replace("login.html");
+          }
+        });
+      }
+    });
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) {
+        document.title = "Come Back Soon!";
+      } else {
+        document.title = "Welcome Back!";
+        setTimeout(() => {
+          document.title = "TARFAIR";
+        }, 2000);
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <nav>
+    <div class="logo">
+      <img src="src/img/tarumt-logo1.png" alt="logo">
+    </div>
+    <div class="nav-links">
+      <a href="main.html" id="cur">Home</a>
+      <a href="#">Event</a>
+      <a href="about.html">About</a>
+    </div>
+    <form class="search-form" action="../server/process_search.php" method="POST">
+      <input type="text" name="search" class="search" placeholder="Search event..." required>
+      <input type="image" src="src/img/search.png" alt="submit" width="15%" height="15%">
+    </form>
+    <div class="account">
+      <a href="#">Account</a>
+    </div>
+    <div class="account">
+    <a href="#" onclick="amogus()">Log out</a>
+  </div>
+  </nav>
+  <div class="content">
+    <div class="text">
+      <h1>Welcome</h1>
+      <p class="text">Welcome to the annual campus fun fair! We are thrilled to have you join us for a day filled with exciting events and activities. Get ready to indulge in delicious food, play fun games, and make unforgettable memories with your fellow students. Our team has been working hard to create an unforgettable experience for you, and we can't wait to see you there! Explore the website to learn more about the upcoming events and register for your favorites. Let's make this year's campus fun fair the best one yet!</p>  
+    </div>
+    <br>
+    <div class="text">
+      <h1>Upcoming Events</h1>
+      <p class="text">Here are some of the exciting events that we have planned for you. We can't wait to see you there!</p>
+      <div class="events">
+        
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
