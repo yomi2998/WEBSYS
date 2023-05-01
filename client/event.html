@@ -9,15 +9,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="src/img/favicon.png" />
   <script>
-    function amogus() {
+    function amogus()
+    {
       localStorage.removeItem("token_id");
       window.location.replace("login.html");
     }
     document.addEventListener('DOMContentLoaded', function () {
-      var navbar = document.querySelector('.nav-links');
-      var navbarHeight = navbar.offsetHeight;
-      var content = document.querySelector('.content');
-      content.style.marginTop = navbarHeight + 'px';
       if (localStorage.getItem("token_id") === null) {
         alert("Please log in to continue");
         window.location.replace("login.html");
@@ -54,23 +51,6 @@
         }, 2000);
       }
     });
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
-        var events = JSON.parse(this.responseText);
-        console.log(events);
-        for (let i = 0; i < events.length; ++i) {
-          var eventContainer = document.querySelector('.events');
-          var newElement = document.createElement('p');
-          newElement.setAttribute('align', 'left');
-          var eventDateTime = events[i]['event_date_time'].slice(0, -7); // Extract date and time string and remove ".000000" at end
-          newElement.textContent = events[i]['event_name'] + ` (${eventDateTime}): ` + events[i]['event_description'];
-          eventContainer.appendChild(newElement);
-        }
-      }
-    };
-    xhr.open("GET", "../server/fetch_event.php", true);
-    xhr.send();
   </script>
 </head>
 
@@ -80,40 +60,21 @@
       <img src="src/img/tarumt-logo1.png" alt="logo">
     </div>
     <div class="nav-links">
-      <a href="main.html" id="cur">Home</a>
-      <a href="event.html">Event</a>
+      <a href="main.html">Home</a>
+      <a href="event.html" id="cur">Event</a>
       <a href="about.html">About</a>
     </div>
     <form class="search-form" action="../server/process_search.php" method="POST">
-      <input type="text" name="search" class="search" placeholder="Search event..." required>
+      <input type="text" name="search" placeholder="Search event..." required>
       <input type="image" src="src/img/search.png" alt="submit" width="15%" height="15%">
     </form>
     <div class="account">
       <a href="#">Account</a>
     </div>
     <div class="account">
-      <a href="#" onclick="amogus()">Log out</a>
-    </div>
-  </nav>
-  <div class="content">
-    <div class="text">
-      <h1>Welcome</h1>
-      <p class="text">Welcome to the annual campus fun fair! We are thrilled to have you join us for a day filled with
-        exciting events and activities. Get ready to indulge in delicious food, play fun games, and make unforgettable
-        memories with your fellow students. Our team has been working hard to create an unforgettable experience for
-        you, and we can't wait to see you there! Explore the website to learn more about the upcoming events and
-        register for your favorites. Let's make this year's campus fun fair the best one yet!</p>
-    </div>
-    <br>
-    <div class="text">
-      <h1>Upcoming Events (First 14 days)</h1>
-      <p class="text">Here are some of the exciting events that we have planned for you. We can't wait to see you there!
-      </p>
-      <div class="events">
-
-      </div>
-    </div>
+    <a href="#" onclick="amogus()">Log out</a>
   </div>
+  </nav>
 </body>
 
 </html>
