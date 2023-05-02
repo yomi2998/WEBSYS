@@ -9,6 +9,13 @@ input.search:focus {
     background-color: rgba(82, 82, 82, 0.4);
     transition: background-color 0.5s ease;
 }
+
+.button {
+    background-color: #ffffff;
+    color: white;
+    text-align: center;
+  }
+  
 input[type='submit']
 {
     background-color: #ffffff;
