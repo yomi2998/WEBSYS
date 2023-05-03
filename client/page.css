@@ -15,8 +15,79 @@ input.search:focus {
     color: white;
     text-align: center;
   }
-  
-input[type='submit']
+  #label,
+label {
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #030000;
+    text-align: left;
+    width: 1000px;
+}
+
+.field {
+    width: 100%;
+    padding: 15px;
+    margin: 8px 0;
+    display: inline-block;
+    border: none;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #ffffff;
+    color: #ffffff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    letter-spacing: 1px;
+    outline: none;
+}
+
+.radio-option input[type="radio"] {
+    display: none;
+
+}
+
+.radio-option label:before {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid black;
+    border-radius: 25%;
+    margin-right: 10px;
+    box-sizing: border-box;
+    text-align: center;
+    line-height: 18px;
+    transition: transform 0.5s ease;
+}
+
+.radio-option input[type="radio"]:checked+label:before {
+    content: "\2714";
+    background-color: black;
+    color: white;
+    transform: rotate(360deg);
+}
+
+.date {
+    width: 97%;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 15px;
+    margin: 8px 0;
+    display: inline-block;
+    border: none;
+    outline: none;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.field:focus {
+        border-bottom: 1px solid #ffffff;
+}
+.submit
 {
     background-color: #ffffff;
     color: #000000;
@@ -33,7 +104,7 @@ input[type='submit']
     margin-top: 20px;
 }
 
-input[type=submit]:hover {
+.submit:hover {
     background-color: #000000;
     color: #fff;
 }
@@ -42,7 +113,7 @@ div.text {
     display: block;
     background-color: rgba(82, 82, 82, 0.4);
     color: #ffffff;
-    max-width: 600px;
+    max-width: 60%;
     margin: auto;
     padding: 40px;
     box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.1);
@@ -132,7 +203,26 @@ nav .nav-links a:hover,
     color: black;
 }
 
+.purchaseField {
+    width: 100%;
+    padding: 15px;
+    margin: 8px 0;
+    display: inline-block;
+    border: none;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #ffffff;
+    color: #ffffff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    letter-spacing: 1px;
+    outline: none;
+}
+
 nav .search-form {
+    color: white;
     flex: 1;
     text-align: right;
     display: flex;
@@ -142,7 +232,6 @@ nav .search-form {
 }
 
 nav .search-form input[type="text"] {
-    color: white;
     padding: 10px;
     text-align: left;
     border-radius: 5px;

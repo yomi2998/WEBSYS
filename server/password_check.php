@@ -1,12 +1,20 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = json_decode(file_get_contents('php://input'), true);
     $myphpadmin_host = "127.0.0.1:3306";
     $myphpadmin_username = "root";
     $myphpadmin_password = "";
     $myphpadmin_dbname = "fun_fair";
     $conn = new mysqli($myphpadmin_host, $myphpadmin_username, $myphpadmin_password, $myphpadmin_dbname);
 
-    $sql = "SELECT * FROM events ORDER BY event_date_time ASC";
+    $sql = "SELECT * FROM account WHERE token_id = ";
+    $sql .= '"';
+    $sql .= $data['token_id'];
+    $sql .= '"';
+    $sql .= " AND password = ";
+    $sql .= '"';
+    $sql .= $data['password'];
+    $sql .= '"';
     $result = $conn->query($sql);
 
     $rows = array();

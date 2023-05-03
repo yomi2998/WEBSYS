@@ -25,9 +25,28 @@
                 if (this.readyState == 4 && this.status == 200) {
                     var events = JSON.parse(this.responseText);
                     var event = events[0];
-                    const eventH1 = document.querySelector('.event-name');
-                    eventH1.textContent = "Check out - " + event['event_name'] + " ticket";
-                    var eventContainer = document.querySelector('.payment');
+                    document.querySelector('.specificeventimg').src = event['image_link'];
+                    document.querySelector('.event-name').textContent = "Check out - " + event['event_name'] + " ticket";
+                    let isfree = event['event_price'] == 0;
+                    document.getElementById('priceper').innerHTML = "Price per ticket: " + (isfree ? "FREE" : "RM " + (event['event_price'] * 1).toFixed(2));
+                    let ticketLeft = event['event_ticket_limit'] - event['event_ticket_purchased'];
+                    document.getElementById('ticketrem').innerHTML = "Ticket remaining: " + ticketLeft;
+                    document.getElementById("pricetot").innerHTML =  isfree ? "Total price: FREE" : "Total price: RM " + (event['event_price'] * 1).toFixed(2);
+                    if(ticketLeft > 1)
+                    {
+                        var ticketField = document.querySelector('.purchaseField');
+                        ticketField.setAttribute("max", Math.min(ticketLeft, 5));
+                        ticketField.readOnly = isfree;
+                        ticketField.disabled = isfree;
+                        document.getElementById('maxpurchase').innerHTML = "You can purchase up to " + (isfree ? 1 : Math.min(ticketLeft, 5)) + " tickets.";
+                        var quantityInput = document.getElementById("quantity");
+                        var priceInput = document.getElementById("pricetot");
+                        quantityInput.addEventListener("input", function () {
+                            var quantity = quantityInput.value;
+                            var price = quantity * event['event_price'];
+                            priceInput.innerHTML = isfree ? "Total price: FREE" : "Total price: RM " + price.toFixed(2);
+                        });
+                    }
                 }
             }
             var navbar = document.querySelector('.nav-links');
@@ -88,7 +107,7 @@
             <input type="image" src="src/img/search.png" alt="submit" width="15%" height="15%">
         </form>
         <div class="account">
-            <a href="#">Account</a>
+            <a href="account.html">Account</a>
         </div>
         <div class="account">
             <a href="#" onclick="amogus()">Log out</a>
@@ -98,6 +117,17 @@
         <div class="text">
             <h1 class="event-name"></h1>
             <div class="payment">
+                <form action="../server/ticket_purchase.php" method="post">
+                    <img class="specificeventimg">
+                    <h3 id="priceper">Price per ticket: </h3>
+                    <h4>You can only purchase ONE ticket if it's free.</h4>
+                    <h4 id="maxpurchase"></h4>
+                    <h4 id="ticketrem"></h4>
+                    <label for="quanitty">Ticket amount: </label>
+                    <input type="number" min="1" value="1" name="quantity" id="quantity" class="purchaseField" required readonly>
+                    <h3 id="pricetot"></h3>
+                    <input type="submit" value="Purchase" class="submit">
+                </form>
             </div>
         </div>
     </div>

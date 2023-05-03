@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $myphpadmin_dbname = "fun_fair";
     $conn = new mysqli($myphpadmin_host, $myphpadmin_username, $myphpadmin_password, $myphpadmin_dbname);
 
-    $sql = "SELECT * FROM events WHERE event_date_time <= DATE_ADD(NOW(), INTERVAL 14 DAY) AND event_ticket_limit > event_ticket_purchased ORDER BY event_date_time ASC";
+    $sql = "SELECT * FROM events WHERE event_date_time <= DATE_ADD(NOW(), INTERVAL 14 DAY) ORDER BY event_date_time ASC";
     $result = $conn->query($sql);
 
     $rows = array();

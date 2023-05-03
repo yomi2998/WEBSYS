@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <!--completed-->
+
 <head>
   <title>TARFAIR</title>
   <link rel="stylesheet" type="text/css" href="page.css">
@@ -54,37 +55,21 @@
         }, 2000);
       }
     });
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
+    const fetchEvent = new XMLHttpRequest();
+    fetchEvent.open('POST', "../server/fetch_account_info.php", true);
+    fetchEvent.send(JSON.stringify({ token_id: localStorage.getItem("token_id") }));
+    fetchEvent.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
-        var events = JSON.parse(this.responseText);
-        for (let i = 0; i < events.length; ++i) {
-          var eventContainer = document.querySelector('.events');
-          var newElement = document.createElement('div');
-          newElement.setAttribute('class', 'event-details');
-          var eventImage = document.createElement('img');
-          eventImage.setAttribute('src', events[i]['image_link']);
-          eventImage.setAttribute('class', 'eventimg');
-          newElement.appendChild(eventImage);
-          var eventDetails = document.createElement('div');
-          eventDetails.setAttribute('class', 'event-info');
-          var eventNameElement = document.createElement('a');
-          eventNameElement.textContent = events[i]['event_name'];
-          eventNameElement.setAttribute('href', `event_details.html?name=${encodeURIComponent(events[i]['event_name'])}`);
-          eventDetails.appendChild(eventNameElement);
-          var eventDateTime = events[i]['event_date_time'].slice(0, -7);
-          var eventDescriptionElement = document.createElement('span');
-          var eventBr = document.createElement('br');
-          eventDescriptionElement.textContent = ` (${eventDateTime}): ${events[i]['event_description']} - ${events[i]['event_price'] == 0 ? "FREE!" : "RM " + events[i]['event_price'] + " per entry."}`;
-          eventDetails.appendChild(eventDescriptionElement);
-          newElement.appendChild(eventDetails);
-          eventContainer.appendChild(newElement);
-          eventContainer.appendChild(eventBr);
-        }
+        var accounts = JSON.parse(this.responseText);
+        var account = accounts[0];
+        document.getElementById("username").innerHTML = "Username: " + account['username'];
+        document.getElementById("gender").innerHTML = "Gender: " + (account['gender'] == "M" ? "Male" : "Female");
+        document.getElementById("email").innerHTML = "Email: " + account['email'];
+        document.getElementById("birthdate").innerHTML = "Birthdate: " + account['birthdate'];
+        document.getElementById("balance").innerHTML = "Balance: RM " + (account['balance'] * 1).toFixed(2);
       }
-    };
-    xhr.open("GET", "../server/fetch_event_all.php", true);
-    xhr.send();
+    }
+
   </script>
 </head>
 
@@ -94,8 +79,8 @@
       <img src="src/img/tarumt-logo1.png" alt="logo">
     </div>
     <div class="nav-links">
-      <a href="main.html">Home</a>
-      <a href="event.html" id="cur">Event</a>
+      <a href="main.html" id="cur">Home</a>
+      <a href="event.html">Event</a>
       <a href="about.html">About</a>
     </div>
     <form class="search-form" action="../server/process_search.php" method="POST">
@@ -111,13 +96,21 @@
   </nav>
   <div class="content">
     <div class="text">
-      <h1>Events</h1>
-      <h3 class="text">Here are some of the exciting events that we have planned for you:</h3>
-      <div class="events">
-
+      <h1>Account info</h1>
+      <br>
+      <img src="src/img/user.png" alt="userimg" width="20%">
+      <h3 id="username"></h3>
+      <h3 id="password">Password: ********</h3>
+      <h3 id="gender"></h3>
+      <h3 id="email"></h3>
+      <h3 id="birthdate"></h3>
+      <h3 id="balance"></h3>
+      <div>
+        <a href="edit.html"><input type="submit" class="submit" value="Edit"></a>
+        &nbsp;
+        <a href="top_up.html"><input type="submit" class="submit" value="Top up"></a>
       </div>
     </div>
-  </div>
 </body>
 
 </html>
