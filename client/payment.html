@@ -8,9 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="src/img/favicon.png" />
+    <link rel="icon" type="image/ico" href="src/img/tarico.ico" />
     <script>
-        function amogus() {
+        function logOut() {
             localStorage.removeItem("token_id");
             window.location.replace("login.html");
         }
@@ -31,14 +31,13 @@
                     document.getElementById('priceper').innerHTML = "Price per ticket: " + (isfree ? "FREE" : "RM " + (event['event_price'] * 1).toFixed(2));
                     let ticketLeft = event['event_ticket_limit'] - event['event_ticket_purchased'];
                     document.getElementById('ticketrem').innerHTML = "Ticket remaining: " + ticketLeft;
-                    document.getElementById("pricetot").innerHTML =  isfree ? "Total price: FREE" : "Total price: RM " + (event['event_price'] * 1).toFixed(2);
-                    if(ticketLeft > 1)
-                    {
+                    document.getElementById("pricetot").innerHTML = isfree ? "Total price: FREE" : "Total price: RM " + (event['event_price'] * 1).toFixed(2);
+                    if (ticketLeft > 1) {
                         var ticketField = document.querySelector('.purchaseField');
                         ticketField.setAttribute("max", Math.min(ticketLeft, 5));
                         ticketField.readOnly = isfree;
                         ticketField.disabled = isfree;
-                        document.getElementById('maxpurchase').innerHTML = "You can purchase up to " + (isfree ? 1 : Math.min(ticketLeft, 5)) + " tickets.";
+                        document.getElementById('maxpurchase').innerHTML = "You can purchase up to " + (isfree ? 1 : Math.min(ticketLeft, 5)) + " ticket(s).";
                         var quantityInput = document.getElementById("quantity");
                         var priceInput = document.getElementById("pricetot");
                         quantityInput.addEventListener("input", function () {
@@ -78,6 +77,28 @@
                     }
                 });
             }
+            document.querySelector('.form').addEventListener('submit', function (event) {
+                event.preventDefault();
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', event.target.action, true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.send(JSON.stringify({ token_id: localStorage.getItem("token_id"), event_name: decodedName, quantity: event.target.quantity.value }));
+                xhr.addEventListener("load", function () {
+                    try {
+                        JSON.parse(xhr.responseText);
+                    }
+                    catch (error) {
+                        console.log(xhr.responseText);
+                    }
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        window.location.replace("purchase_successful.html");
+                    }
+                    else {
+                        window.location.replace("purchase_failed.html");
+                    }
+                });
+            });
         });
         document.addEventListener("visibilitychange", function () {
             if (document.hidden) {
@@ -95,7 +116,7 @@
 <body>
     <nav>
         <div class="logo">
-            <img src="src/img/tarumt-logo1.png" alt="logo">
+            <img src="src/img/tarumt-logo1.png" onclick="window.location.replace('main.html')" alt="logo" style="cursor: pointer;">
         </div>
         <div class="nav-links">
             <a href="main.html">Home</a>
@@ -110,21 +131,21 @@
             <a href="account.html">Account</a>
         </div>
         <div class="account">
-            <a href="#" onclick="amogus()">Log out</a>
+            <a href="#" onclick="logOut()">Log out</a>
         </div>
     </nav>
     <div class="content">
         <div class="text">
             <h1 class="event-name"></h1>
             <div class="payment">
-                <form action="../server/ticket_purchase.php" method="post">
+                <form action="../server/ticket_purchase.php" method="post" class="form">
                     <img class="specificeventimg">
                     <h3 id="priceper">Price per ticket: </h3>
-                    <h4>You can only purchase ONE ticket if it's free.</h4>
                     <h4 id="maxpurchase"></h4>
                     <h4 id="ticketrem"></h4>
                     <label for="quanitty">Ticket amount: </label>
-                    <input type="number" min="1" value="1" name="quantity" id="quantity" class="purchaseField" required readonly>
+                    <input type="number" min="1" value="1" name="quantity" id="quantity" class="purchaseField" required
+                        readonly>
                     <h3 id="pricetot"></h3>
                     <input type="submit" value="Purchase" class="submit">
                 </form>

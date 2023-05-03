@@ -30,16 +30,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
         $evn = $row['event_id'];
-        $price = $row['event_price'];
-        if($bal < $price * $quantity)
+        $result = $conn->query("SELECT * FROM recordpurchase WHERE event_id = '$evn' AND username = '$usr' AND quantity = '$quantity");
+        $row = $result->fetch_assoc();
+        if(count($row) == 0)
         {
             $response = array('success' => false);
             echo json_encode($response);
             exit();
         }
-        $conn->query("INSERT INTO recordpurchase (username, event_id, quantity, price) VALUES ('$usr', '$evn', '$quantity', '$price' * '$quantity')");
-        $conn->query("UPDATE account SET balance = balance - '$price' * '$quantity' WHERE token_id = '$token'");
-        $conn->query("UPDATE events SET event_ticket_purchased = event_ticket_purchased + '$quantity' WHERE event_name = '$event'");
+        $price = $row['price'];
+        $conn->query("DELETE recordpurchase WHERE event_id = '$evn' AND username = '$usr' AND quantity = '$quantity'");
+        $conn->query("UPDATE account SET balance = balance + '$price' WHERE token_id = '$token'");
+        $conn->query("UPDATE events SET event_ticket_purchased = event_ticket_purchased - '$quantity' WHERE event_name = '$event'");
         $response = array('success' => true);
         echo json_encode($response);
     }

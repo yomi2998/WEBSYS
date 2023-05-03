@@ -8,9 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="src/img/favicon.png" />
+    <link rel="icon" type="image/ico" href="src/img/tarico.ico" />
     <script>
-        function amogus() {
+        function logOut() {
             localStorage.removeItem("token_id");
             window.location.replace("login.html");
         }
@@ -126,7 +126,7 @@
 <body>
     <nav>
         <div class="logo">
-            <img src="src/img/tarumt-logo1.png" alt="logo">
+            <img src="src/img/tarumt-logo1.png" onclick="window.location.replace('main.html')" alt="logo" style="cursor: pointer;">
         </div>
         <div class="nav-links">
             <a href="main.html" id="cur">Home</a>
@@ -141,7 +141,7 @@
             <a href="account.html">Account</a>
         </div>
         <div class="account">
-            <a href="#" onclick="amogus()">Log out</a>
+            <a href="#" onclick="logOut()">Log out</a>
         </div>
     </nav>
     <div class="content">

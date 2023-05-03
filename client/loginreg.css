@@ -88,7 +88,7 @@ input[type=password] {
 }
 
 input[type="date"] {
-    width: 100%;
+    width: 95%;
     font-size: 16px;
     font-weight: 600;
     padding: 15px;
@@ -98,6 +98,7 @@ input[type="date"] {
     background-color: rgba(0, 0, 0, 0.1);
     border: 1px solid #ccc;
     border-radius: 5px;
+    color-scheme: dark;
 }
 
 input[type=text]:focus,

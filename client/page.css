@@ -81,6 +81,7 @@ label {
     outline: none;
     background-color: rgba(0, 0, 0, 0.1);
     border: 1px solid #ccc;
+    color-scheme: dark;
     border-radius: 5px;
 }
 
@@ -172,7 +173,7 @@ nav {
 }
 
 .logo {
-    height: 90%;
+    height: 100%;
     max-height: 100%;
     display: flex;
     margin-left: 1%;
