@@ -173,7 +173,7 @@ nav {
     left: 0;
     right: 0;
     padding: 10px;
-    height: 60px;
+    height: 10%;
     z-index: 1;
     background-color: transparent;
     backdrop-filter: blur(30px);
@@ -215,7 +215,7 @@ nav .nav-links a {
     display: inline-block;
     color: white;
     text-align: left;
-    padding: 30px 16px;
+    padding: 5% 5%;
     max-height: 16px;
     text-decoration: none;
     transition: background-color 0.2s linear, color 0.2s linear;

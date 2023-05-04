@@ -45,6 +45,13 @@
             localStorage.removeItem("token_id");
             window.location.replace("login.html");
           }
+          if (response.admin) {
+            var account = document.querySelector(".nav-links");
+            var anchor = document.createElement("a");
+            anchor.href = "admin_main.html";
+            anchor.innerText = "Admin";
+            account.appendChild(anchor);
+          }
         });
       }
     });

@@ -2,7 +2,7 @@
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $s = new stdClass();
   $s->flag = 0;
-
+  $s->admin = 0;
   $data = json_decode(file_get_contents('php://input'), true);
   $token = $data['token_id'];
 
@@ -22,6 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$result1->num_rows) {
       $s->flag = 1;
     }
+    $row = $result1->fetch_assoc();
+    $s->admin = $row["is_admin"];
     $stmt->close();
   } else {
     $s->flag = 1;

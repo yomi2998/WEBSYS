@@ -3,7 +3,7 @@
 <!--completed-->
 
 <head>
-  <title>Account</title>
+  <title>Admin panel</title>
   <link rel="stylesheet" type="text/css" href="page.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,6 +51,7 @@
             var anchor = document.createElement("a");
             anchor.href = "admin_main.html";
             anchor.innerText = "Admin";
+            anchor.id = "cur";
             account.appendChild(anchor);
           }
         });
@@ -62,25 +63,22 @@
       } else {
         document.title = "Welcome Back!";
         setTimeout(() => {
-          document.title = "Account";
+          document.title = "Admin panel";
         }, 2000);
       }
     });
-    const fetchEvent = new XMLHttpRequest();
-    fetchEvent.open('POST', "../server/fetch_account_info.php", true);
-    fetchEvent.send(JSON.stringify({ token_id: localStorage.getItem("token_id") }));
-    fetchEvent.onreadystatechange = function () {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
-        var accounts = JSON.parse(this.responseText);
-        var account = accounts[0];
-        document.getElementById("username").innerHTML = "Username: " + account['username'];
-        document.getElementById("gender").innerHTML = "Gender: " + (account['gender'] == "M" ? "Male" : "Female");
-        document.getElementById("email").innerHTML = "Email: " + account['email'];
-        document.getElementById("birthdate").innerHTML = "Birthdate: " + account['birthdate'];
-        document.getElementById("balance").innerHTML = "Balance: RM " + (account['balance'] * 1).toFixed(2);
-      }
-    }
+        var events = JSON.parse(this.responseText);
+        console.log(events);
+        for (let i = 0; i < events.length; ++i) {
 
+        }
+      }
+    };
+    xhr.open("GET", "../server/fetch_event_14days.php", true);
+    xhr.send();
   </script>
 </head>
 
@@ -106,21 +104,14 @@
   </nav>
   <div class="content">
     <div class="text">
-      <h1>Account info</h1>
-      <br>
-      <img draggable="false" src="src/img/user.png" alt="userimg" width="20%">
-      <h3 id="username"></h3>
-      <h3 id="password">Password: ********</h3>
-      <h3 id="gender"></h3>
-      <h3 id="email"></h3>
-      <h3 id="birthdate"></h3>
-      <h3 id="balance"></h3>
-      <div>
-        <a href="edit.html"><input type="submit" class="submit" value="Edit"></a>
-        &nbsp;
-        <a href="top_up.html"><input type="submit" class="submit" value="Top up"></a>
-        &nbsp;
-        <a href="purchase_record.html"><input type="submit" class="submit" value="View purchase record"></a>
+      <h1>Admin panel</h1>
+    </div>
+    <br>
+    <div class="text">
+      <h1>Recent purchase</h1>
+      <hr><br>
+      <div class="purchaserec">
+
       </div>
     </div>
   </div>

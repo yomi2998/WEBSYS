@@ -46,6 +46,13 @@
             localStorage.removeItem("token_id");
             window.location.replace("login.html");
           }
+          if(response.admin) {
+            var account = document.querySelector(".nav-links");
+            var anchor = document.createElement("a");
+            anchor.href = "admin_main.html";
+            anchor.innerText = "Admin";
+            account.appendChild(anchor);
+          }
         });
       }
     });
@@ -105,7 +112,7 @@
             var eventDateTime = events[i]['purchase_date'];
             var eventDescriptionElement = document.createElement('span');
             var eventDivider = document.createElement('hr');
-            eventDescriptionElement.textContent = ` (Date purchased: ${eventDateTime}) - Quantity: ${events[i]['quantity']}, total: RM ${events[i]['price']}.`;
+            eventDescriptionElement.textContent = `: (Date purchased: ${eventDateTime}) - Quantity: ${events[i]['quantity']}, total: RM ${events[i]['price']}.`;
             eventDetails.appendChild(eventDescriptionElement);
             newElement.appendChild(eventDetails);
             eventContainer.appendChild(newElement);
@@ -145,6 +152,8 @@
   <div class="content">
     <div class="text">
       <h1>Purchase records</h1>
+      <hr>
+      <br>
       <div class="events">
 
       </div>
