@@ -15,6 +15,10 @@
             window.location.replace("login.html");
         }
         document.addEventListener('DOMContentLoaded', function () {
+            document.querySelector('.search-form').addEventListener('submit', function (event) {
+                event.preventDefault();
+                window.location.replace(`search.html?name=${encodeURIComponent(event.target.search.value)}`);
+            });
             const url = new URL(window.location.href);
             const name = url.searchParams.get('name');
             const decodedName = decodeURIComponent(name);
@@ -116,7 +120,8 @@
 <body>
     <nav>
         <div class="logo">
-            <img src="src/img/tarumt-logo1.png" onclick="window.location.replace('main.html')" alt="logo" style="cursor: pointer;">
+            <img draggable="false" src="src/img/tarumt-logo1.png" onclick="window.location.replace('main.html')"
+                alt="logo" style="cursor: pointer;">
         </div>
         <div class="nav-links">
             <a href="main.html">Home</a>
@@ -139,7 +144,7 @@
             <h1 class="event-name"></h1>
             <div class="payment">
                 <form action="../server/ticket_purchase.php" method="post" class="form">
-                    <img class="specificeventimg">
+                    <img draggable="false" class="specificeventimg">
                     <h3 id="priceper">Price per ticket: </h3>
                     <h4 id="maxpurchase"></h4>
                     <h4 id="ticketrem"></h4>

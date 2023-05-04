@@ -2,6 +2,12 @@ body {
     font-family: 'Outfit', sans-serif;
     background: url('src/img/bg.jpg')no-repeat center center fixed;
     background-size: cover;
+    user-select: none;
+    overflow: overlay;
+}
+
+.search {
+    color: white;
 }
 
 input.search,
@@ -14,8 +20,9 @@ input.search:focus {
     background-color: #ffffff;
     color: white;
     text-align: center;
-  }
-  #label,
+}
+
+#label,
 label {
     display: block;
     font-size: 18px;
@@ -86,10 +93,10 @@ label {
 }
 
 .field:focus {
-        border-bottom: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
 }
-.submit
-{
+
+.submit {
     background-color: #ffffff;
     color: #000000;
     font-size: 18px;
@@ -112,7 +119,7 @@ label {
 
 div.text {
     display: block;
-    background-color: rgba(82, 82, 82, 0.4);
+    background-color: rgba(82, 82, 82, 0.1);
     color: #ffffff;
     max-width: 60%;
     margin: auto;
@@ -273,16 +280,16 @@ a:hover {
 }
 
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #b3b6b9;
+    background-color: #ffffff81;
     border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: #a1a3a6;
+    background-color: rgba(255, 255, 255, 0.295);
 }
 
 ::-webkit-scrollbar-button {

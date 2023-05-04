@@ -15,6 +15,10 @@
       window.location.replace("login.html");
     }
     document.addEventListener('DOMContentLoaded', function () {
+      document.querySelector('.search-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        window.location.replace(`search.html?name=${encodeURIComponent(event.target.search.value)}`);
+      });
       var navbar = document.querySelector('.nav-links');
       var navbarHeight = navbar.offsetHeight;
       var content = document.querySelector('.content');
@@ -76,7 +80,8 @@
 <body>
   <nav>
     <div class="logo">
-      <img src="src/img/tarumt-logo1.png" onclick="window.location.replace('main.html')" alt="logo" style="cursor: pointer;">
+      <img draggable="false" src="src/img/tarumt-logo1.png" onclick="window.location.replace('main.html')" alt="logo"
+        style="cursor: pointer;">
     </div>
     <div class="nav-links">
       <a href="main.html" id="cur">Home</a>
@@ -98,7 +103,7 @@
     <div class="text">
       <h1>Account info</h1>
       <br>
-      <img src="src/img/user.png" alt="userimg" width="20%">
+      <img draggable="false" src="src/img/user.png" alt="userimg" width="20%">
       <h3 id="username"></h3>
       <h3 id="password">Password: ********</h3>
       <h3 id="gender"></h3>

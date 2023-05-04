@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <!--completed-->
+
 <head>
   <title>TARFAIR</title>
   <link rel="stylesheet" type="text/css" href="page.css">
@@ -14,6 +15,10 @@
       window.location.replace("login.html");
     }
     document.addEventListener('DOMContentLoaded', function () {
+      document.querySelector('.search-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        window.location.replace(`search.html?name=${encodeURIComponent(event.target.search.value)}`);
+      });
       var navbar = document.querySelector('.nav-links');
       var navbarHeight = navbar.offsetHeight;
       var content = document.querySelector('.content');
@@ -58,51 +63,56 @@
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
-        try{
-            JSON.parse(this.responseText);
+        try {
+          JSON.parse(this.responseText);
         }
-        catch(error){
-            console.log(this.responseText);
+        catch (error) {
+          console.log(this.responseText);
         }
         var events = JSON.parse(this.responseText);
         console.log(events);
-        if(events.length == 0)
-        {
-            var eventContainer = document.querySelector('.events');
-            var newElement = document.createElement('div');
-            newElement.setAttribute('class', 'event-details');
-            var eventDetails = document.createElement('div');
-            eventDetails.setAttribute('class', 'event-info');
-            var eventDescriptionElement = document.createElement('span');
-            eventDescriptionElement.textContent = `No purchase records found.`;
-            eventDetails.appendChild(eventDescriptionElement);
-            newElement.appendChild(eventDetails);
-            eventContainer.appendChild(newElement);
-        }
-        else
-        for (let i = 0; i < events.length; ++i) {
+        if (events.length == 0) {
           var eventContainer = document.querySelector('.events');
           var newElement = document.createElement('div');
           newElement.setAttribute('class', 'event-details');
-          var eventImage = document.createElement('img');
-          eventImage.setAttribute('src', events[i]['image_link']);
-          eventImage.setAttribute('class', 'eventimg');
-          newElement.appendChild(eventImage);
           var eventDetails = document.createElement('div');
           eventDetails.setAttribute('class', 'event-info');
-          var eventNameElement = document.createElement('a');
-          eventNameElement.textContent = events[i]['event_name'];
-          eventNameElement.setAttribute('href', `event_details.html?name=${encodeURIComponent(events[i]['event_name'])}`);
-          eventDetails.appendChild(eventNameElement);
-          var eventDateTime = events[i]['purchase_date'];
           var eventDescriptionElement = document.createElement('span');
-          var eventBr = document.createElement('br');
-          eventDescriptionElement.textContent = ` (Date purchased: ${eventDateTime}) - Quantity: ${events[i]['quantity']}, total: RM ${events[i]['price']}.`;
+          eventDescriptionElement.textContent = `No purchase records found.`;
           eventDetails.appendChild(eventDescriptionElement);
           newElement.appendChild(eventDetails);
           eventContainer.appendChild(newElement);
-          eventContainer.appendChild(eventBr);
         }
+        else
+          for (let i = 0; i < events.length; ++i) {
+            var eventBr = document.createElement('br');
+            var eventBr2 = document.createElement('br');
+            var eventBr3 = document.createElement('br');
+            var eventContainer = document.querySelector('.events');
+            var newElement = document.createElement('div');
+            newElement.setAttribute('class', 'event-details');
+            var eventImage = document.createElement('img');
+            eventImage.setAttribute('src', events[i]['image_link']);
+            eventImage.setAttribute('class', 'eventimg');
+            eventImage.setAttribute('draggable', 'false');
+            newElement.appendChild(eventImage);
+            var eventDetails = document.createElement('div');
+            eventDetails.setAttribute('class', 'event-info');
+            var eventNameElement = document.createElement('a');
+            eventNameElement.textContent = events[i]['event_name'];
+            eventNameElement.setAttribute('href', `event_details.html?name=${encodeURIComponent(events[i]['event_name'])}`);
+            eventDetails.appendChild(eventNameElement);
+            var eventDateTime = events[i]['purchase_date'];
+            var eventDescriptionElement = document.createElement('span');
+            var eventDivider = document.createElement('hr');
+            eventDescriptionElement.textContent = ` (Date purchased: ${eventDateTime}) - Quantity: ${events[i]['quantity']}, total: RM ${events[i]['price']}.`;
+            eventDetails.appendChild(eventDescriptionElement);
+            newElement.appendChild(eventDetails);
+            eventContainer.appendChild(newElement);
+            eventContainer.appendChild(eventBr2);
+            eventContainer.appendChild(eventDivider);
+            eventContainer.appendChild(eventBr3);
+          }
       }
     };
     xhr.open("POST", "../server/fetch_purchase_record.php", true);
@@ -113,7 +123,8 @@
 <body>
   <nav>
     <div class="logo">
-      <img src="src/img/tarumt-logo1.png" onclick="window.location.replace('main.html')" alt="logo" style="cursor: pointer;">
+      <img draggable="false" src="src/img/tarumt-logo1.png" onclick="window.location.replace('main.html')" alt="logo"
+        style="cursor: pointer;">
     </div>
     <div class="nav-links">
       <a href="main.html">Home</a>

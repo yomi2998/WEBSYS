@@ -15,6 +15,10 @@
             window.location.replace("login.html");
         }
         document.addEventListener('DOMContentLoaded', function () {
+            document.querySelector('.search-form').addEventListener('submit', function (event) {
+                event.preventDefault();
+                window.location.replace(`search.html?name=${encodeURIComponent(event.target.search.value)}`);
+            });
             const url = new URL(window.location.href);
             const name = url.searchParams.get('name');
             const decodedName = decodeURIComponent(name);
@@ -33,6 +37,7 @@
                     eventContainer.appendChild(eventTicket);
                     var eventImage = document.createElement('img');
                     eventImage.setAttribute('class', 'specificeventimg');
+                    eventImage.setAttribute('draggable', 'false');
                     eventImage.setAttribute('src', event['image_link']);
                     eventContainer.appendChild(eventImage);
                     var eventName = document.createElement('h3');
@@ -51,8 +56,7 @@
                     let ticketLeft = event['event_ticket_limit'] - event['event_ticket_purchased'];
                     eventTicket.textContent = "Ticket left: " + ticketLeft;
                     eventContainer.appendChild(eventTicket);
-                    if(ticketLeft > 0)
-                    {
+                    if (ticketLeft > 0) {
                         var eventButton = document.createElement('a');
                         eventButton.setAttribute('href', `payment.html?name=${encodeURIComponent(event['event_name'])}`);
                         eventButton.setAttribute('class', 'button');
@@ -111,7 +115,8 @@
 <body>
     <nav>
         <div class="logo">
-            <img src="src/img/tarumt-logo1.png" onclick="window.location.replace('main.html')" alt="logo" style="cursor: pointer;">
+            <img draggable="false" src="src/img/tarumt-logo1.png" onclick="window.location.replace('main.html')"
+                alt="logo" style="cursor: pointer;">
         </div>
         <div class="nav-links">
             <a href="main.html">Home</a>

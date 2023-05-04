@@ -9,11 +9,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="src/img/favicon.png"  />
+  <link rel="icon" type="image/png" href="src/img/favicon.png" />
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      if(localStorage.getItem("token_id")!== null)
-      {
+      if (localStorage.getItem("token_id") !== null) {
         const token = { token_id: localStorage.getItem("token_id") };
         const xhr = new XMLHttpRequest();
         xhr.open('POST', "../server/token_check.php", true);
@@ -30,7 +29,7 @@
           if (!response.flag) {
             window.location.replace("main.html");
           }
-      });
+        });
       }
       document.querySelector('form').addEventListener('submit', function (event) {
         console.log("triggered");
@@ -84,7 +83,7 @@
       Don't have an TARFAIR ID? <a href="register.html" style="color:black">Create one now.</a>
     </p>
   </form>
-</div>
+  </div>
 </body>
 
 </html>

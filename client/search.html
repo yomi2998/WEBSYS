@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<!--completed-->
+
+<head>
+    <title>TARFAIR</title>
+    <link rel="stylesheet" type="text/css" href="page.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/ico" href="src/img/tarico.ico" />
+    <script>
+        const url = new URL(window.location.href);
+        const name = url.searchParams.get('name');
+        const decodedName = decodeURIComponent(name);
+        function logOut() {
+            localStorage.removeItem("token_id");
+            window.location.replace("login.html");
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('srch').value = decodedName;
+            document.querySelector('.search-form').addEventListener('submit', function (event) {
+                event.preventDefault();
+                window.location.replace(`search.html?name=${encodeURIComponent(event.target.search.value)}`);
+            });
+            var navbar = document.querySelector('.nav-links');
+            var navbarHeight = navbar.offsetHeight;
+            var content = document.querySelector('.content');
+            content.style.marginTop = navbarHeight + 'px';
+            if (localStorage.getItem("token_id") === null) {
+                alert("Please log in to continue");
+                window.location.replace("login.html");
+            }
+            else {
+                const token = { token_id: localStorage.getItem("token_id") };
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', "../server/token_check.php", true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.send(JSON.stringify(token));
+                xhr.addEventListener("load", function () {
+                    try {
+                        JSON.parse(xhr.responseText);
+                    }
+                    catch (error) {
+                        console.log(xhr.responseText);
+                    }
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.flag) {
+                        alert("Failed to validate token_id, please log in again.");
+                        localStorage.removeItem("token_id");
+                        window.location.replace("login.html");
+                    }
+                });
+            }
+        });
+        document.addEventListener("visibilitychange", function () {
+            if (document.hidden) {
+                document.title = "Come Back Soon!";
+            } else {
+                document.title = "Welcome Back!";
+                setTimeout(() => {
+                    document.title = "TARFAIR";
+                }, 2000);
+            }
+        });
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                try {
+                    JSON.parse(this.responseText);
+                }
+                catch (error) {
+                    console.log(this.responseText);
+                }
+                var events = JSON.parse(this.responseText);
+                for (let i = 0; i < events.length; ++i) {
+                    var eventContainer = document.querySelector('.events');
+                    var newElement = document.createElement('div');
+                    newElement.setAttribute('class', 'event-details');
+                    var eventBr = document.createElement('br');
+                    var eventBr2 = document.createElement('br');
+                    var eventBr3 = document.createElement('br');
+                    var eventImage = document.createElement('img');
+                    eventImage.setAttribute('src', events[i]['image_link']);
+                    eventImage.setAttribute('draggable', 'false');
+                    eventImage.setAttribute('class', 'eventimg');
+                    newElement.appendChild(eventImage);
+                    newElement.appendChild(eventBr);
+                    var eventDetails = document.createElement('div');
+                    eventDetails.setAttribute('class', 'event-info');
+                    var eventNameElement = document.createElement('a');
+                    eventNameElement.textContent = events[i]['event_name'];
+                    eventNameElement.setAttribute('href', `event_details.html?name=${encodeURIComponent(events[i]['event_name'])}`);
+                    eventDetails.appendChild(eventNameElement);
+                    var eventDateTime = events[i]['event_date_time'].slice(0, -7);
+                    var eventDescriptionElement = document.createElement('span');
+                    var eventDivider = document.createElement('hr');
+                    eventDescriptionElement.textContent = ` (${eventDateTime}): ${events[i]['event_description']} - ${events[i]['event_price'] == 0 ? "FREE!" : "RM " + events[i]['event_price'] + " per entry."}`;
+                    eventDetails.appendChild(eventDescriptionElement);
+                    newElement.appendChild(eventDetails);
+                    eventContainer.appendChild(newElement);
+                    eventContainer.appendChild(eventBr2);
+                    eventContainer.appendChild(eventDivider);
+                    eventContainer.appendChild(eventBr3);
+                }
+            }
+        };
+        xhr.open("POST", "../server/process_search.php", true);
+        xhr.send(JSON.stringify({ event_name: decodedName }));
+    </script>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            <img draggable="false" src="src/img/tarumt-logo1.png" onclick="window.location.replace('main.html')"
+                alt="logo" style="cursor: pointer;">
+        </div>
+        <div class="nav-links">
+            <a href="main.html">Home</a>
+            <a href="event.html" id="cur">Event</a>
+            <a href="about.html">About</a>
+        </div>
+        <form class="search-form" action="../server/process_search.php" method="POST">
+            <input type="text" name="search" class="search" placeholder="Search event..." id="srch" required>
+            <input type="image" src="src/img/search.png" alt="submit" width="15%" height="15%">
+        </form>
+        <div class="account">
+            <a href="account.html">Account</a>
+        </div>
+        <div class="account">
+            <a href="#" onclick="logOut()">Log out</a>
+        </div>
+    </nav>
+    <div class="content">
+        <div class="text">
+            <h1>Search result</h1>
+            <h3 class="text">Here are the search result:</h3>
+            <hr><br>
+            <div class="events">
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
