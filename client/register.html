@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>TARFAIR Fun Fair Registration</title>
+  <title>Register - TARFAIR</title>
   <link rel="stylesheet" type="text/css" href="loginreg.css">
   <link rel="stylesheet" type="text/css" href="page.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,7 +50,13 @@
         }
       });
     });
-
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState === 'visible') {
+        document.title = "Register - TARFAIR";
+      } else {
+        document.title = "Come back later!";
+      }
+    }); 
   </script>
 
 

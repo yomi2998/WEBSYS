@@ -3,7 +3,7 @@
 <!--completed-->
 
 <head>
-    <title>TARFAIR</title>
+    <title>Search result</title>
     <link rel="stylesheet" type="text/css" href="page.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,7 +59,7 @@
             } else {
                 document.title = "Welcome Back!";
                 setTimeout(() => {
-                    document.title = "TARFAIR";
+                    document.title = "Search result";
                 }, 2000);
             }
         });
@@ -118,7 +118,7 @@
         </div>
         <div class="nav-links">
             <a href="main.html">Home</a>
-            <a href="event.html" id="cur">Event</a>
+            <a href="event.html">Event</a>
             <a href="about.html">About</a>
         </div>
         <form class="search-form" action="../server/process_search.php" method="POST">
@@ -127,10 +127,8 @@
         </form>
         <div class="account">
             <a href="account.html">Account</a>
-        </div>
-        <div class="account">
             <a href="#" onclick="logOut()">Log out</a>
-        </div>
+          </div>
     </nav>
     <div class="content">
         <div class="text">
