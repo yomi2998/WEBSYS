@@ -7,6 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $myphpadmin_dbname = "fun_fair";
     $s->flag = 0;
     $data = json_decode(file_get_contents('php://input'), true);
+    $purchase_id = $data['purchase_id'];
     $event = $data['event_name'];
     $username = $data['username'];
     $quantity = $data['quantity'];
@@ -24,17 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $usr = $row['username'];
         $bal = $row['balance'];
-        $result = $conn->query("SELECT * FROM events WHERE event_name = '$event'");
-        $row = $result->fetch_assoc();
-        if(count($row) == 0)
-        {
-            $s->flag = 1;
-            $s->error = "Undo failed: Unable to find event.";
-            echo json_encode($s);
-            exit();
-        }
-        $evn = $row['event_id'];
-        $result = $conn->query("SELECT * FROM recordpurchase WHERE event_id = '$evn' AND username = '$usr' AND quantity = '$quantity'");
+        $result = $conn->query("SELECT * FROM recordpurchase WHERE purchase_id = '$purchase_id'");
         $row = $result->fetch_assoc();
         if(count($row) == 0)
         {
@@ -44,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
         $price = $row['price'];
-        $conn->query("DELETE FROM recordpurchase WHERE event_id = '$evn' AND username = '$usr' AND quantity = '$quantity'");
+        $conn->query("DELETE FROM recordpurchase WHERE purchase_id = '$purchase_id'");
         $conn->query("UPDATE account SET balance = balance + '$price' WHERE username = '$username'");
         $conn->query("UPDATE events SET event_ticket_purchased = event_ticket_purchased - '$quantity' WHERE event_name = '$event'");
         $s->error = "Purchase undone successfully, balance has been returned back to user.";

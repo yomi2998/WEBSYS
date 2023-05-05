@@ -126,6 +126,7 @@
                     xhr.open('POST', "../server/undo_purchase.php", true);
                     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                     const data = JSON.stringify({
+                      purchase_id: transactionID,
                       event_name: event_name,
                       username: username,
                       quantity: quantity
