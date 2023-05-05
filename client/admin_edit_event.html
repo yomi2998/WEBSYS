@@ -3,7 +3,7 @@
 <!--completed-->
 
 <head>
-  <title>Admin panel</title>
+  <title>Events</title>
   <link rel="stylesheet" type="text/css" href="page.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,32 +15,6 @@
       window.location.replace("login.html");
     }
     document.addEventListener('DOMContentLoaded', function () {
-      const fetchEvent = new XMLHttpRequest();
-      fetchEvent.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-          var events = JSON.parse(this.responseText);
-          console.log(events);
-          document.getElementById('totalevn').innerHTML = `Total events: ${events.length}`;
-        }
-      };
-      fetchEvent.open("GET", "../server/fetch_event_all.php", true);
-      fetchEvent.send();
-      const fetchPurchase = new XMLHttpRequest();
-      fetchPurchase.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-          try {
-            JSON.parse(this.responseText);
-          }
-          catch (error) {
-            console.log(this.responseText);
-          }
-          var transactions = JSON.parse(this.responseText);
-          console.log(transactions);
-          document.getElementById('totaltrs').innerHTML = `Total transactions: ${transactions.length}`;
-        }
-      };
-      fetchPurchase.open("GET", "../server/fetch_purchase_record.php", true);
-      fetchPurchase.send();
       document.querySelector('.search-form').addEventListener('submit', function (event) {
         event.preventDefault();
         window.location.replace(`search.html?name=${encodeURIComponent(event.target.search.value)}`);
@@ -72,12 +46,12 @@
             localStorage.removeItem("token_id");
             window.location.replace("login.html");
           }
-          if (response.admin) {
+          if(response.admin) {
             var account = document.querySelector(".nav-links");
             var anchor = document.createElement("a");
             anchor.href = "admin_main.html";
             anchor.innerText = "Admin";
-            anchor.id = "cur";
+            anchor.id = 'cur';
             account.appendChild(anchor);
           }
         });
@@ -89,10 +63,48 @@
       } else {
         document.title = "Welcome Back!";
         setTimeout(() => {
-          document.title = "Admin panel";
+          document.title = "Events";
         }, 2000);
       }
     });
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        var events = JSON.parse(this.responseText);
+        for (let i = 0; i < events.length; ++i) {
+          var eventContainer = document.querySelector('.events');
+          var newElement = document.createElement('div');
+          newElement.setAttribute('class', 'event-details');
+          var eventBr = document.createElement('br');
+          var eventBr2 = document.createElement('br');
+          var eventBr3 = document.createElement('br');
+          var eventImage = document.createElement('img');
+          eventImage.setAttribute('src', events[i]['image_link']);
+          eventImage.setAttribute('draggable', 'false');
+          eventImage.setAttribute('class', 'eventimg');
+          newElement.appendChild(eventImage);
+          newElement.appendChild(eventBr);
+          var eventDetails = document.createElement('div');
+          eventDetails.setAttribute('class', 'event-info');
+          var eventNameElement = document.createElement('a');
+          eventNameElement.textContent = events[i]['event_name'];
+          eventNameElement.setAttribute('href', `admin_edit_event_details.html?name=${encodeURIComponent(events[i]['event_name'])}`);
+          eventDetails.appendChild(eventNameElement);
+          var eventDateTime = events[i]['event_date_time'].slice(0, -7);
+          var eventDescriptionElement = document.createElement('span');
+          var eventDivider = document.createElement('hr');
+          eventDescriptionElement.textContent = ` (${eventDateTime}): ${events[i]['event_description']} - ${events[i]['event_price'] == 0 ? "FREE!" : "RM " + events[i]['event_price'] + " per entry."}`;
+          eventDetails.appendChild(eventDescriptionElement);
+          newElement.appendChild(eventDetails);
+          eventContainer.appendChild(newElement);
+          eventContainer.appendChild(eventBr2);
+          eventContainer.appendChild(eventDivider);
+          eventContainer.appendChild(eventBr3);
+        }
+      }
+    };
+    xhr.open("GET", "../server/fetch_event_all.php", true);
+    xhr.send();
   </script>
 </head>
 
@@ -107,8 +119,8 @@
       <a href="event.html">Event</a>
       <a href="about.html">About</a>
     </div>
-    <form class="search-form" action="../server/process_search.php" method="POST">
-      <input type="text" name="search" class="search" placeholder="Search event..." required>
+    <form class="search-form" action="#" method="POST">
+      <input type="text" name="search" class="search" id="srch" placeholder="Search event..." required>
       <input type="image" src="src/img/search.png" alt="submit" width="15%" height="15%">
     </form>
     <div class="account">
@@ -118,27 +130,12 @@
   </nav>
   <div class="content">
     <div class="text">
-      <h1>Admin panel</h1>
-    </div>
-    <br>
-    <div class="text">
-      <h1>Manage events</h1>
-      <h3>View, add, and edit current events</h3>
+      <h1>Edit event</h1>
+      <h3 class="text">Click on the event name below to start editing.</h3>
       <hr><br>
-      <a href="event.html" style="text-decoration: none;"><button class="submit" type="submit">View events</button></a>
-      &nbsp;
-      <a href="admin_add_event.html" style="text-decoration: none;"><button class="submit" type="submit">Add events</button></a>
-      &nbsp;
-      <a href="admin_edit_event.html" style="text-decoration: none;"><button class="submit" type="submit">Edit events</button></a>
-      <h2 id="totalevn"></h2>
-    </div>
-    <br>
-    <div class="text">
-      <h1>Manage transactions</h1>
-      <h3>View or undo transactions performed by members</h3>
-      <hr><br>
-      <a href="admin_manage_transactions.html" style="text-decoration: none;"><button class="submit" type="submit">View/undo transactions</button></a>
-      <h2 id="totaltrs"></h2>
+      <div class="events">
+
+      </div>
     </div>
   </div>
 </body>

@@ -37,7 +37,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode($response);
             exit();
         }
-        $conn->query("INSERT INTO recordpurchase (username, event_id, quantity, price) VALUES ('$usr', '$evn', '$quantity', '$price' * '$quantity')");
+        function generateID() {
+            $prefix = "PUR";
+            $characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            $randomString = "";
+            
+            for ($i = 0; $i < 7; $i++) {
+              $randomString .= $characters[rand(0, strlen($characters) - 1)];
+            }
+            
+            return $prefix . $randomString;
+          }
+          $new_id = generateID();
+        $conn->query("INSERT INTO recordpurchase (purchase_id, username, event_id, quantity, price) VALUES ('$new_id', '$usr', '$evn', '$quantity', '$price' * '$quantity')");
         $conn->query("UPDATE account SET balance = balance - '$price' * '$quantity' WHERE token_id = '$token'");
         $conn->query("UPDATE events SET event_ticket_purchased = event_ticket_purchased + '$quantity' WHERE event_name = '$event'");
         $response = array('success' => true);

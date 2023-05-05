@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<!--completed-->
+
+<head>
+    <title>Add event</title>
+    <link rel="stylesheet" type="text/css" href="page.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/ico" href="src/img/tarico.ico" />
+    <script>
+        function logOut() {
+            localStorage.removeItem("token_id");
+            window.location.replace("login.html");
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelector('.search-form').addEventListener('submit', function (event) {
+                event.preventDefault();
+                window.location.replace(`search.html?name=${encodeURIComponent(event.target.search.value)}`);
+            });
+            var navbar = document.querySelector('.nav-links');
+            var navbarHeight = navbar.offsetHeight;
+            var content = document.querySelector('.content');
+            content.style.marginTop = navbarHeight + 'px';
+            if (localStorage.getItem("token_id") === null) {
+                alert("Please log in to continue");
+                window.location.replace("login.html");
+            }
+            else {
+                const token = { token_id: localStorage.getItem("token_id") };
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', "../server/token_check.php", true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.send(JSON.stringify(token));
+                xhr.addEventListener("load", function () {
+                    try {
+                        JSON.parse(xhr.responseText);
+                    }
+                    catch (error) {
+                        console.log(xhr.responseText);
+                    }
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.flag) {
+                        alert("Failed to validate token_id, please log in again.");
+                        localStorage.removeItem("token_id");
+                        window.location.replace("login.html");
+                    }
+                    if (response.admin) {
+                        var account = document.querySelector(".nav-links");
+                        var anchor = document.createElement("a");
+                        anchor.href = "admin_main.html";
+                        anchor.innerText = "Admin";
+                        anchor.setAttribute('id', 'cur');
+                        account.appendChild(anchor);
+                    }
+                });
+            }
+            document.querySelector('.form').addEventListener('submit', function (event) {
+                let password = prompt("To verify it's you, please enter your password.");
+                event.preventDefault();
+                const fetchEvent = new XMLHttpRequest();
+                fetchEvent.open('POST', "../server/password_check.php", true);
+                fetchEvent.send(JSON.stringify({ token_id: localStorage.getItem("token_id"), password: password }));
+                fetchEvent.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        result = JSON.parse(this.responseText);
+                        if (result.length != 0) {
+                            const xhr = new XMLHttpRequest();
+                            xhr.open('POST', event.target.action, true);
+                            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                            const data = JSON.stringify({
+                                event_id: event.target.id.value,
+                                event_name: event.target.name.value,
+                                event_description: event.target.description.value,
+                                event_location: event.target.location.value,
+                                event_price: event.target.price.value,
+                                event_ticket_limit: event.target.ticket.value,
+                                event_date_time: event.target.date.value + " " + event.target.time.value,
+                                image_link: event.target.image.value,
+                            });
+                            xhr.send(data);
+                            xhr.addEventListener("load", function () {
+                                try {
+                                    JSON.parse(xhr.responseText);
+                                }
+                                catch (error) {
+                                    console.log(xhr.responseText);
+                                }
+                                const response = JSON.parse(xhr.responseText);
+                                switch (response.flag) {
+                                    case 0:
+                                        alert(response.error);
+                                        window.location.replace("admin_main.html");
+                                        break;
+                                    case 1:
+                                        alert(response.error);
+                                        break;
+                                }
+                            });
+                        }
+                        else {
+                            alert("Error: Password mismatch.");
+                        }
+                    }
+                }
+            });
+        });
+        document.addEventListener("visibilitychange", function () {
+            if (document.hidden) {
+                document.title = "Come Back Soon!";
+            } else {
+                document.title = "Welcome Back!";
+                setTimeout(() => {
+                    document.title = "Add event";
+                }, 2000);
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            <img draggable="false" src="src/img/tarumt-logo1.png" onclick="window.location.replace('main.html')"
+                alt="logo" style="cursor: pointer;">
+        </div>
+        <div class="nav-links">
+            <a href="main.html">Home</a>
+            <a href="event.html">Event</a>
+            <a href="about.html">About</a>
+        </div>
+        <form class="search-form" action="../server/process_search.php" method="POST">
+            <input type="text" name="search" class="search" placeholder="Search event..." required>
+            <input type="image" src="src/img/search.png" alt="submit" width="15%" height="15%">
+        </form>
+        <div class="account">
+            <a href="account.html">Account</a>
+            <a href="#" onclick="logOut()">Log out</a>
+        </div>
+    </nav>
+    <div class="content">
+        <div class="text">
+            <h1>Add event</h1>
+            <hr><br>
+            <form action="../server/add_event.php" class="form">
+                <div>
+                    <label for="name">Event ID (10 characters): </label>
+                    <input type="text" class="field" name="id" value="FFEVT" required>
+                </div>
+                <div>
+                    <label for="name">Event name: </label>
+                    <input type="text" class="field" name="name" placeholder="Enter event name" required>
+                </div>
+                <div>
+                    <label for="name">Event description: </label>
+                    <input type="text" class="field" name="description" placeholder="Enter event description" required>
+                </div>
+                <div>
+                    <label for="name">Event location: </label>
+                    <input type="text" class="field" name="location" placeholder="Enter event location" required>
+                </div>
+                <div>
+                    <label for="name">Event price (RM): </label>
+                    <input type="number" class="field" name="price" min="0" value="10" required>
+                </div>
+                <div>
+                    <label for="name">Event ticket limit: </label>
+                    <input type="number" class="field" name="ticket" min="0" value="300" required>
+                </div>
+                <div>
+                    <label for="date">Event date: </label>
+                    <input type="date" class="date" name="date" required>
+                </div>
+                <div>
+                    <label for="time">Event time: </label>
+                    <input type="time" class="time" name="time" required>
+                </div>
+                <div>
+                    <label for="name">Event image link: </label>
+                    <input type="text" class="field" name="image" placeholder="Enter event image link" required>
+                </div>
+                <div>
+                    <input type="submit" value="Submit" class="submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
