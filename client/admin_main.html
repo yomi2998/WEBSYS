@@ -19,7 +19,6 @@
       fetchEvent.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
           var events = JSON.parse(this.responseText);
-          console.log(events);
           document.getElementById('totalevn').innerHTML = `Total events: ${events.length}`;
         }
       };
@@ -35,7 +34,6 @@
             console.log(this.responseText);
           }
           var transactions = JSON.parse(this.responseText);
-          console.log(transactions);
           document.getElementById('totaltrs').innerHTML = `Total transactions: ${transactions.length}`;
         }
       };

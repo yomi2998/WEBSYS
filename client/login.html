@@ -32,7 +32,6 @@
         });
       }
       document.querySelector('form').addEventListener('submit', function (event) {
-        console.log("triggered");
         event.preventDefault();
         const xhr = new XMLHttpRequest();
         xhr.open('POST', event.target.action, true);

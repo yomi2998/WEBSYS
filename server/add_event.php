@@ -50,8 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $s->flag = 1;
             $s->error = "Error: Event ID already exists.";
         } else {
-            $sql = "INSERT INTO events (event_id, event_name, event_description, event_location, event_price, event_ticket_limit, event_ticket_purchased, event_date_time, image_link, can_multiple_purchase) VALUES (";
-            $sql .= "'$event_id', '$event_name', '$event_description', '$event_location', '$event_price', '$event_ticket_limit', '0', '$event_date_time', '$image_link', '0')";
+            $sql = "INSERT INTO events (event_id, event_name, event_description, event_location, event_price, event_ticket_limit, event_ticket_purchased, event_date_time, image_link) VALUES (";
+            $sql .= "'$event_id', '$event_name', '$event_description', '$event_location', '$event_price', '$event_ticket_limit', '0', '$event_date_time', '$image_link')";
             $result = $conn->query($sql);
             if (!$result) {
                 $s->flag = 1;

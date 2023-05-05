@@ -3,13 +3,41 @@
 <!--completed-->
 
 <head>
-    <title>Purchased successful</title>
+    <title>Top up</title>
     <link rel="stylesheet" type="text/css" href="page.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap" rel="stylesheet">
     <link rel="icon" type="image/ico" href="src/img/tarico.ico" />
     <script>
+        function addFund(amount) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', "../server/top_up.php", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            const data = {
+                token_id: localStorage.getItem("token_id"),
+                amount: amount
+            };
+            xhr.send(JSON.stringify(data));
+            xhr.addEventListener("load", function () {
+                try {
+                    JSON.parse(xhr.responseText);
+                }
+                catch (error) {
+                    console.log(xhr.responseText);
+                }
+                const response = JSON.parse(xhr.responseText);
+                switch (response.flag) {
+                    case 0:
+                        alert(response.error);
+                        window.location.replace("account.html");
+                        break;
+                    case 1:
+                        alert(response.error);
+                        break;
+                }
+            });
+        }
         function logOut() {
             localStorage.removeItem("token_id");
             window.location.replace("login.html");
@@ -62,7 +90,7 @@
             } else {
                 document.title = "Welcome Back!";
                 setTimeout(() => {
-                    document.title = "Purchased successful";
+                    document.title = "Top up";
                 }, 2000);
             }
         });
@@ -77,7 +105,7 @@
         </div>
         <div class="nav-links">
             <a href="main.html">Home</a>
-            <a href="event.html" id="cur">Event</a>
+            <a href="event.html">Event</a>
             <a href="about.html">About</a>
         </div>
         <form class="search-form" action="../server/process_search.php" method="POST">
@@ -85,15 +113,21 @@
             <input type="image" src="src/img/search.png" alt="submit" width="15%" height="15%">
         </form>
         <div class="account">
-            <a href="account.html">Account</a>
+            <a href="account.html" id="cur">Account</a>
             <a href="#" onclick="logOut()">Log out</a>
         </div>
     </nav>
     <div class="content">
         <div class="text">
-                <i class="checkmarkok">&#10003;</i>
-                <h1>Successful</h1> 
-            <h1>Purchase successful! Click <a href="purchase_record.html">here</a> to access purchase records.</h1>
+            <h1>Top up</h1>
+            <h3>Choose button below to top up.</h3>
+            <a onclick="addFund(5)"><button class="submit" type="submit">RM 5</button></a>
+            &nbsp;
+            <a onclick="addFund(10)"><button class="submit" type="submit">RM 10</button></a>
+            &nbsp;
+            <a onclick="addFund(50)"><button class="submit" type="submit">RM 50</button></a>
+            &nbsp;
+            <a onclick="addFund(100)"><button class="submit" type="submit">RM 100</button></a>
         </div>
 </body>
 

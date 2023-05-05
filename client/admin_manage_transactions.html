@@ -3,7 +3,7 @@
 <!--completed-->
 
 <head>
-  <title>Events</title>
+  <title>Manage transactions</title>
   <link rel="stylesheet" type="text/css" href="page.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -64,7 +64,7 @@
       } else {
         document.title = "Welcome Back!";
         setTimeout(() => {
-          document.title = "Events";
+          document.title = "Manage transactions";
         }, 2000);
       }
     });
@@ -111,9 +111,6 @@
             var username = this.parentNode.parentNode.cells[1].innerHTML;
             var quantity = this.parentNode.parentNode.cells[3].innerHTML;
             var transactionID = this.parentNode.parentNode.cells[0].innerHTML;
-            console.log(event_name);
-            console.log(username);
-            console.log(quantity);
             let password = prompt("To verify it's you, please enter your password.");
             event.preventDefault();
             const fetchEvent = new XMLHttpRequest();

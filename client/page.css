@@ -311,3 +311,19 @@ a:hover {
 iframe {
     border-radius: 5%;
 }
+
+.checkmarkok {
+    color: #0eee4e;
+    font-size: 100px;
+    line-height: 200px;
+    margin-left:-15px;
+    font-weight: 600;
+  }
+
+  .checkmarkfail {
+    color: red;
+    font-size: 100px;
+    font-weight: 600;
+    line-height: 200px;
+    margin-left:-15px;
+  }

@@ -1,1 +1,100 @@
-fail
+<!DOCTYPE html>
+<html>
+<!--completed-->
+
+<head>
+    <title>Purchased failed</title>
+    <link rel="stylesheet" type="text/css" href="page.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/ico" href="src/img/tarico.ico" />
+    <script>
+        function logOut() {
+            localStorage.removeItem("token_id");
+            window.location.replace("login.html");
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelector('.search-form').addEventListener('submit', function (event) {
+                event.preventDefault();
+                window.location.replace(`search.html?name=${encodeURIComponent(event.target.search.value)}`);
+            });
+            var navbar = document.querySelector('.nav-links');
+            var navbarHeight = navbar.offsetHeight;
+            var content = document.querySelector('.content');
+            content.style.marginTop = navbarHeight + 'px';
+            if (localStorage.getItem("token_id") === null) {
+                alert("Please log in to continue");
+                window.location.replace("login.html");
+            }
+            else {
+                const token = { token_id: localStorage.getItem("token_id") };
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', "../server/token_check.php", true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.send(JSON.stringify(token));
+                xhr.addEventListener("load", function () {
+                    try {
+                        JSON.parse(xhr.responseText);
+                    }
+                    catch (error) {
+                        console.log(xhr.responseText);
+                    }
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.flag) {
+                        alert("Failed to validate token_id, please log in again.");
+                        localStorage.removeItem("token_id");
+                        window.location.replace("login.html");
+                    }
+                    if (response.admin) {
+                        var account = document.querySelector(".nav-links");
+                        var anchor = document.createElement("a");
+                        anchor.href = "admin_main.html";
+                        anchor.innerText = "Admin";
+                        account.appendChild(anchor);
+                    }
+                });
+            }
+        });
+        document.addEventListener("visibilitychange", function () {
+            if (document.hidden) {
+                document.title = "Come Back Soon!";
+            } else {
+                document.title = "Welcome Back!";
+                setTimeout(() => {
+                    document.title = "Purchased failed";
+                }, 2000);
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            <img draggable="false" src="src/img/tarumt-logo1.png" onclick="window.location.replace('main.html')"
+                alt="logo" style="cursor: pointer;">
+        </div>
+        <div class="nav-links">
+            <a href="main.html">Home</a>
+            <a href="event.html" id="cur">Event</a>
+            <a href="about.html">About</a>
+        </div>
+        <form class="search-form" action="../server/process_search.php" method="POST">
+            <input type="text" name="search" class="search" placeholder="Search event..." required>
+            <input type="image" src="src/img/search.png" alt="submit" width="15%" height="15%">
+        </form>
+        <div class="account">
+            <a href="account.html">Account</a>
+            <a href="#" onclick="logOut()">Log out</a>
+        </div>
+    </nav>
+    <div class="content">
+        <div class="text">
+                <i class="checkmarkfail">X</i>
+                <h1>Failed</h1> 
+            <h1>Purchase failed! Check your account balance and try again.</h1>
+        </div>
+</body>
+
+</html>
